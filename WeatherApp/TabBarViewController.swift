@@ -7,15 +7,28 @@
 
 import UIKit
 
-class TabBarViewController: UITabBarController {
-
+class TabBarViewController: UITabBarController,UINavigationControllerDelegate {
+    var city = ""
+    var weatherData:WeatherDataModel?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.navigationController?.delegate = self
         // Do any additional setup after loading the view.
+        navigationItem.title = city
     }
     
-
+    @IBAction func twitterbuttonPressed(_ sender: Any) {
+        let application = UIApplication.shared
+        let urlString = "https://twitter.com/intent/tweet?text="
+        var contentString = "The temperature in \(city) is \((weatherData?.currentWeatherData.temperature)!)F. The weather conditions are \(WeatherDataModel.getTextFromWeatherCode(code: (weatherData?.currentWeatherData.weatherCode)!)) #CSCI571WeatherSearch"
+        contentString = contentString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        print("content string = " + contentString)
+        let url = URL(string: urlString + contentString)
+        application.open(url!)
+    }
+    
     /*
     // MARK: - Navigation
 
